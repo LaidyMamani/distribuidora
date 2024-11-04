@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROYECTO CUARTO BIMESTRE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5; 
+            margin: 0;
+            padding: 20px;
+        }
+    
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-image: url('img/fondo.jpg');
+            background-size: cover; 
+            background-position: center; 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #f8f8f8;
+        }
+
+        .table {
+            width: 100%; 
+            background-color: #f2f2f2;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .text-right {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        img {
+            max-width: 100%; 
+        }
+
+        .active {
+            background-color: rgb(190, 202, 190);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¨DISTRIBUIDORA LEY¨<br>Zona Central Av. Camacho N. 1277<br>Contactos: 2345678</h1>
+        <table class="table">
+            <tr>
+                <th colspan="4"></th>
+            </tr>
+            <tr>
+                
+                <td colspan="3" rowspan="4"> <img src="img/logo.jpeg" width="580px" height="150px"> </td>
+                <td><label for="numeroNota">NOTA DE VENTA N.:</label></td>
+                <tr><td colspan="1"><input type="text" id="numeroNota" class="form-control" placeholder="Número"></td></tr>
+            </tr>
+            <tr>
+                <td><label for="fecha">FECHA:</label></td>
+                <tr><td colspan="1"><input type="date" id="fecha" name="fecha" class="form-control"></td></tr>
+            </tr>
+            <tr>
+                <td><label for="cliente">CLIENTE:</label></td>
+                <td colspan="3"><input type="text" id="cliente" class="form-control" placeholder="Nombre del cliente"></td>
+            </tr>
+            <tr>
+                <td><label for="tel">TEL:</label></td>
+                <td><input type="text" id="tel" class="form-control" placeholder="Teléfono"></td>
+                <td><label for="email">E-MAIL:</label></td>
+                <td><input type="email" id="email" class="form-control" placeholder="Correo electrónico"></td>
+            </tr>
+            <tr>
+                <td><label for="direccion">DIRECCION:</label></td>
+                <td colspan="3"><input type="text" id="direccion" class="form-control" placeholder="Dirección del cliente"></td>
+            </tr>
+        </table>
+        
+        <div class="separador"></div> <!-- Separador entre secciones -->
+
+        <table class="table">
+            <tr>
+                <th width="5%">CANT.</th>
+                <th width="25%">DESCRIPCION</th>
+                <th width="15%">P.U.</th>
+                <th width="15%">IMPORTE</th>
+            </tr>
+            <script>
+                for (let i = 1; i <= 5; i++) {
+                    document.write(`
+                        <tr>
+                            <td><input type="number" class="form-control" id="cant${i}" onkeyup="calcular()" value="0"></td>
+                            <td>
+                                <select name="det${i}" id="det${i}" class="form-control" onchange="mostrarDescripcion(${i})">
+                                    <option>Seleccione su Producto...</option>
+                                    <option value="P01">XIOMI REDMI 12</option>
+                                    <option value="P02">LAPTOP HP PAVILLON 14</option>
+                                    <option value="P03">LAPTOP HP 15.6</option>
+                                    <option value="P04">LAPTOP ASUS</option>
+                                    <option value="P05">APPLE M1</option>
+                                </select>
+                                <div id="desc${i}"></div>
+                            </td>
+                            <td><input type="number" class="form-control" id="pu${i}" onkeyup="calcular()" value="0"></td>
+                            <td><input type="number" class="form-control" id="subt${i}" value="0" readonly></td>
+                        </tr>
+                    `);
+                }
+            </script>
+            <tr class="active" style="background-color: rgb(190, 202, 190);">
+                <th colspan="2" rowspan="2" class="text-right">Son:<br><span id="total_literal"></span></th>
+                <th class="text-right">SUB TOTAL:</th>
+                <th><input type="number" class="form-control" id="sub_total" readonly></th>
+            </tr>
+            <tr>
+                <th>IVA</th>
+                <td><input type="number" class="form-control" id="iva" readonly></td>
+            </tr>
+            <tr>
+                <th colspan="2">Expedido por:
+                    <select id="expedida_por" class="form-control">
+                        <option>Seleccione...</option>
+                        <option value="persona1">Laidy Mamani</option>
+                        <option value="persona2">Anastasia Gómez</option>
+                        <option value="persona3">Luis Robles</option>
+                    </select>
+                </th>
+                <th>TOTAL</th>
+                <td><input type="number" class="form-control" id="total" readonly></td>
+            </tr>
+        </table>
+        <div class="text-right"><button class="btn btn-warning" onclick="window.print()">IMPRIMIR</button></div>
+    </div>
+
+    <script>
+        function calcular() {
+            let total = 0;
+            for (let i = 1; i <= 5; i++) {
+                let cant = parseInt(document.getElementById(`cant${i}`).value) || 0;
+                let pu = parseFloat(document.getElementById(`pu${i}`).value) || 0;
+                let subtotal = cant * pu;
+                document.getElementById(`subt${i}`).value = subtotal.toFixed(2);
+                total += subtotal;
+            }
+            document.getElementById("sub_total").value = total.toFixed(2);
+            let iva = total * 0.13;
+            document.getElementById("iva").value = iva.toFixed(2);
+            let totalFinal = total + iva;
+            document.getElementById("total").value = totalFinal.toFixed(2);
+            
+            document.getElementById("total_literal").innerText = convertirTotal(totalFinal);
+        }
+
+        function numeroALetras(num) {
+            const unidades = ['', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
+            const decenas = ['', 'diez', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+            const centenas = ['', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+
+            if (num === 0) return 'cero bolivianos';
+
+            let letras = '';
+
+            if (num < 10) letras = unidades[num];
+            else if (num < 100) letras = decenas[Math.floor(num / 10)] + (num % 10 === 0 ? '' : ' y ' + unidades[num % 10]);
+            else if (num < 1000) letras = centenas[Math.floor(num / 100)] + (num % 100 === 0 ? '' : ' ' + numeroALetras(num % 100));
+            else if (num < 1000000) {
+                letras = numeroALetras(Math.floor(num / 1000)) + ' mil';
+                if (num % 1000 !== 0) letras += ' ' + numeroALetras(num % 1000);
+            } else {
+                return "Valor fuera de rango";
+            }
+
+            return letras ;
+        }
+
+        function convertirTotal(total) {
+            const entero = Math.floor(total);
+            const centavos = Math.round((total - entero) * 100);
+            
+            let resultado = numeroALetras(entero);
+            if (centavos > 0) {
+                resultado +=   ' bolivianos'+' con ' + numeroALetras(centavos) + ' centavos';
+            }
+
+            return resultado;
+        }
+
+        function mostrarDescripcion(fila) {
+            let select = document.getElementById(`det${fila}`);
+            let detalles = "";
+            switch (select.value) {
+                case "P01":
+                    detalles = '<table><tr><td rowspan="3"><img src="img/prod1.jpg" width="120px"></td><td>Color: Midnight Black</td></tr><tr><td>Processor: Octa Core</td></tr><tr><td>Screen Size: 6.4 in</td></tr></table>';
+                    break;
+                case "P02":
+                    detalles = '<table><tr><td rowspan="3"><img src="img/prod2.jpg" width="120px"></td><td>Color: Yellow</td></tr><tr><td>Processor: Intel i5</td></tr><tr><td>Screen Size: 14 in</td></tr></table>';
+                    break;
+                case "P03":
+                    detalles = '<table><tr><td rowspan="3"><img src="img/prod3.jpg" width="120px"></td><td>Color: Silver</td></tr><tr><td>Processor: AMD Ryzen 7</td></tr><tr><td>Screen Size: 15.6 in</td></tr></table>';
+                    break;
+                case "P04":
+                    detalles = '<table><tr><td rowspan="3"><img src="img/prod4.jpg" width="120px"></td><td>Color: Blue</td></tr><tr><td>Processor: Intel i7</td></tr><tr><td>Screen Size: 13.3 in</td></tr></table>';
+                    break;
+                case "P05":
+                    detalles = '<table><tr><td rowspan="3"><img src="img/prod5.jpg" width="120px"></td><td>Color: White</td></tr><tr><td>Processor: Apple M1</td></tr><tr><td>Screen Size: 12.9 in</td></tr></table>';
+                    break;
+                default:
+                    detalles = "Seleccione un producto.";
+            }
+            document.getElementById(`desc${fila}`).innerHTML = detalles;
+        }
+    </script>
+</body>
+</html>
